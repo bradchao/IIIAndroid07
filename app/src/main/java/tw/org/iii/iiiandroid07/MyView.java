@@ -53,6 +53,11 @@ public class MyView extends View {
         }
     }
 
+    public void clear(){
+        lines.clear();
+        invalidate();
+    }
+
     private class Point {
         float x, y;
         Point(float x , float y){
