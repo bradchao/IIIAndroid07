@@ -14,20 +14,25 @@ import androidx.annotation.Nullable;
 import java.util.LinkedList;
 
 public class MyView extends View {
-    private LinkedList<Point> line;
+    private LinkedList<LinkedList<Point>> lines;
 
     public MyView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setBackgroundColor(Color.BLUE);
 
-        line = new LinkedList<>();
+        lines = new LinkedList<>();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float ex = event.getX(), ey = event.getY();
         Point point = new Point(ex, ey);
-        line.add(point);
+
+        if (event.getAction() == MotionEvent.ACTION_DOWN){
+            LinkedList<Point> line = new LinkedList<>();
+            lines.add(line);
+        }
+        lines.getLast().add(point);
         //  Java => repaint
         invalidate();
         return true; //super.onTouchEvent(event);
@@ -40,11 +45,12 @@ public class MyView extends View {
         paint.setColor(Color.YELLOW);
         paint.setStrokeWidth(10);
 
-        for(int i=1; i<line.size(); i++){
-            Point p0 = line.get(i-1); Point p1 = line.get(i);
-            canvas.drawLine(p0.x, p0.y, p1.x, p1.y, paint);
+        for (LinkedList<Point> line : lines){
+            for(int i=1; i<line.size(); i++){
+                Point p0 = line.get(i-1); Point p1 = line.get(i);
+                canvas.drawLine(p0.x, p0.y, p1.x, p1.y, paint);
+            }
         }
-
     }
 
     private class Point {
