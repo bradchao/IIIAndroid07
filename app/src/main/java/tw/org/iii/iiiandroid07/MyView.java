@@ -58,6 +58,11 @@ public class MyView extends View {
         invalidate();
     }
 
+    public void undo(){
+        lines.removeLast();
+        invalidate();
+    }
+
     private class Point {
         float x, y;
         Point(float x , float y){
