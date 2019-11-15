@@ -11,24 +11,26 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import java.util.LinkedList;
+
 public class MyView extends View {
+    private LinkedList<Point> line;
 
     public MyView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setBackgroundColor(Color.BLUE);
 
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v("brad", "onClick");
-            }
-        });
+        line = new LinkedList<>();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.v("brad", "onTouch");
-        return super.onTouchEvent(event);
+        float ex = event.getX(), ey = event.getY();
+        Point point = new Point(ex, ey);
+        line.add(point);
+        //  Java => repaint
+        invalidate();
+        return true; //super.onTouchEvent(event);
     }
 
     @Override
@@ -37,6 +39,19 @@ public class MyView extends View {
         Paint paint = new Paint();
         paint.setColor(Color.YELLOW);
         paint.setStrokeWidth(10);
-        canvas.drawLine(0, 0, 200, 200, paint);
+
+        for(int i=1; i<line.size(); i++){
+            Point p0 = line.get(i-1); Point p1 = line.get(i);
+            canvas.drawLine(p0.x, p0.y, p1.x, p1.y, paint);
+        }
+
     }
+
+    private class Point {
+        float x, y;
+        Point(float x , float y){
+            this.x = x; this.y = y;
+        }
+    }
+
 }
