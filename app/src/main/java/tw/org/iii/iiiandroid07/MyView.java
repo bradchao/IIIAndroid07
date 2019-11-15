@@ -14,13 +14,14 @@ import androidx.annotation.Nullable;
 import java.util.LinkedList;
 
 public class MyView extends View {
-    private LinkedList<LinkedList<Point>> lines;
+    private LinkedList<LinkedList<Point>> lines, recycler;
 
     public MyView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setBackgroundColor(Color.BLUE);
 
         lines = new LinkedList<>();
+        recycler = new LinkedList<>();
     }
 
     @Override
@@ -29,12 +30,15 @@ public class MyView extends View {
         Point point = new Point(ex, ey);
 
         if (event.getAction() == MotionEvent.ACTION_DOWN){
+            recycler.clear();
             LinkedList<Point> line = new LinkedList<>();
             lines.add(line);
         }
         lines.getLast().add(point);
         //  Java => repaint
         invalidate();
+
+
         return true; //super.onTouchEvent(event);
     }
 
@@ -59,8 +63,17 @@ public class MyView extends View {
     }
 
     public void undo(){
-        lines.removeLast();
-        invalidate();
+        if (lines.size()>1) {
+            recycler.add(lines.removeLast());
+            invalidate();
+        }
+    }
+
+    public void redo(){
+        if (recycler.size()>1) {
+            lines.add(recycler.removeLast());
+            invalidate();
+        }
     }
 
     private class Point {

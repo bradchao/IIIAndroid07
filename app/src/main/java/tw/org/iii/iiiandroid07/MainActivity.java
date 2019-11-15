@@ -23,4 +23,8 @@ public class MainActivity extends AppCompatActivity {
     public void undo(View view) {
         myView.undo();
     }
+
+    public void redo(View view) {
+        myView.redo();
+    }
 }
