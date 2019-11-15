@@ -63,14 +63,14 @@ public class MyView extends View {
     }
 
     public void undo(){
-        if (lines.size()>1) {
+        if (lines.size()>0) {
             recycler.add(lines.removeLast());
             invalidate();
         }
     }
 
     public void redo(){
-        if (recycler.size()>1) {
+        if (recycler.size()>0) {
             lines.add(recycler.removeLast());
             invalidate();
         }
